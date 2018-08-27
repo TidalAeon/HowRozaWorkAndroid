@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class main extends Activity {
     public CalendarDay correctionDay; //Это первый рабочий день отсчета
-
+    //Коммент с рабочего компа для проверки
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
