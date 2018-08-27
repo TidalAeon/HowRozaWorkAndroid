@@ -37,15 +37,21 @@ public class main extends Activity {
     private ArrayList<CalendarDay> createCal() {
         ArrayList<CalendarDay> wDays = new ArrayList();
         //wDays.add(correctionDay);
-        for (int i = correctionDay.getDay(); i < checkMonth(correctionDay); i++) {
-            if ((i - correctionDay.getDay()) % 6 < 3)
-                wDays.add(CalendarDay.from(2018, correctionDay.getMonth(), i));
+        int fday = 3;
+        for (int y = 2018; y <= 2020; y++) {
+            for (int m = 0; m <= 11; m++) { //Обертка по месяцам (пока на август-сентябрь)
+                for (int d = 1; d <= checkMonth(CalendarDay.from(y, m, 5)); d++) { //Обертка по дням
+                    if ((d + fday) % 6 < 3)
+                        wDays.add(CalendarDay.from(y, m, d));
+                    if (d == checkMonth(CalendarDay.from(y, m, d))) fday = (d + fday) % 6;
+                }
+            }
         }
         return wDays;
     }
 
     private int checkMonth(CalendarDay calDay) {
-        int maxdate = 31;
+        int maxdate = 0;
         if (calDay.getMonth() == 0 || calDay.getMonth() == 2 || calDay.getMonth() == 4 || calDay.getMonth() == 6 || calDay.getMonth() == 7 || calDay.getMonth() == 9 || calDay.getMonth() == 11)
             maxdate = 31;
         if (calDay.getMonth() == 3 || calDay.getMonth() == 5 || calDay.getMonth() == 8 || calDay.getMonth() == 10)
