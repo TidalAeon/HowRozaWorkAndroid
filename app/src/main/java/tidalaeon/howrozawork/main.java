@@ -1,42 +1,79 @@
 package tidalaeon.howrozawork;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 public class main extends Activity {
     public CalendarDay correctionDay; //Это первый рабочий день отсчета
-    //Коммент с рабочего компа для проверки
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TextView nowTextView = findViewById(R.id.nowTextView);
         setContentView(R.layout.activity_main);
-        correctionDay = CalendarDay.from(2018, 7, 1);
+        Create();
     }
+    /////////////////////////////////////////////////////////////////////
+    public class EventDecorator implements DayViewDecorator {
+        private final ArrayList<CalendarDay> dates;
 
-    public void Create(View view) { //Функция Create() рисует на календаре текущую ситуацию.
+        public EventDecorator(Collection<CalendarDay> dates) {
+            this.dates = new ArrayList<>(dates);
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(day);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new BackgroundColorSpan(0xFF0266));
+        }
+    }
+    /////////////////////////////////////////////////////////////////////
+
+    public void Create() { //Функция Create() рисует на календаре текущую ситуацию.
         CalendarDay.today();
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         ArrayList<CalendarDay> wDays = createCal();
-        for (CalendarDay day : wDays) calendarView.setDateSelected(day, true);
+        EventDecorator decor = new EventDecorator(wDays);
+        decor.shouldDecorate(CalendarDay.from(2018, 7, 23));
+        for (CalendarDay day : wDays) {
+            calendarView.setDateSelected(day, true);
+            decor.shouldDecorate(day);
+        }
         TextView nowTextView = findViewById(R.id.nowTextView);
         nowTextView.setText("" + CalendarDay.today());
-        //calendarView.selectRange(CalendarDay.from(2018, 7, 15), CalendarDay.from(2018, 7, 20));
     }
 
     private ArrayList<CalendarDay> createCal() {
         ArrayList<CalendarDay> wDays = new ArrayList();
-        //wDays.add(correctionDay);
         int fday = 3;
         for (int y = 2018; y <= 2020; y++) {
             for (int m = 0; m <= 11; m++) { //Обертка по месяцам (пока на август-сентябрь)
@@ -65,10 +102,6 @@ public class main extends Activity {
         return maxdate;
     }
 
-    public void main(String[] args) throws IOException {
-
-    }
-
     private static String GetNow() { //Функция GetNow() возвращает текущую дату в красивом виде типа "Сегодня 25.04.1996, вт"
         Date now = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy', 'E");
@@ -81,6 +114,7 @@ public class main extends Activity {
     public void InitCorrectEquations(View view) throws IOException {
         // CorrectEquations(view);
     }
+
 }
 
     /*
