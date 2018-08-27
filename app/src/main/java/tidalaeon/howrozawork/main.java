@@ -101,4 +101,4 @@ public class main extends Activity {
         long difference = dateOne.getTime() - dateTwo.getTime();
         // Перевод количества дней между датами из миллисекунд в дни
         int days =  (int)(difference / (24 * 60 * 60 * 1000)); // миллисекунды / (24ч * 60мин * 60сек * 1000мс)
-        nowTextView.setText("" + days + " дней");
+        nowTextView.setText("" + days + " дней");*/
