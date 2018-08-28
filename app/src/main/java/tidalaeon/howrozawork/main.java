@@ -38,35 +38,13 @@ public class main extends Activity {
         setContentView(R.layout.activity_main);
         Create();
     }
-    /////////////////////////////////////////////////////////////////////
-    public class EventDecorator implements DayViewDecorator {
-        private final ArrayList<CalendarDay> dates;
-
-        public EventDecorator(Collection<CalendarDay> dates) {
-            this.dates = new ArrayList<>(dates);
-        }
-
-        @Override
-        public boolean shouldDecorate(CalendarDay day) {
-            return dates.contains(day);
-        }
-
-        @Override
-        public void decorate(DayViewFacade view) {
-            view.addSpan(new BackgroundColorSpan(0xFF0266));
-        }
-    }
-    /////////////////////////////////////////////////////////////////////
 
     public void Create() { //Функция Create() рисует на календаре текущую ситуацию.
         CalendarDay.today();
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         ArrayList<CalendarDay> wDays = createCal();
-        EventDecorator decor = new EventDecorator(wDays);
-        decor.shouldDecorate(CalendarDay.from(2018, 7, 23));
         for (CalendarDay day : wDays) {
             calendarView.setDateSelected(day, true);
-            decor.shouldDecorate(day);
         }
         TextView nowTextView = findViewById(R.id.nowTextView);
         nowTextView.setText("" + CalendarDay.today());
