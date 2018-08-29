@@ -42,8 +42,8 @@ public class main extends Activity {
     public class EventDecorator implements DayViewDecorator {
         private final ArrayList<CalendarDay> dates;
 
-        public EventDecorator(Collection<CalendarDay> dates) {
-            this.dates = new ArrayList<>(dates);
+        public EventDecorator(ArrayList<CalendarDay> dates) {
+            this.dates = dates;
         }
 
         @Override
@@ -53,8 +53,8 @@ public class main extends Activity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new BackgroundColorSpan(0xFF0266));
-        }
+            view.addSpan(new BackgroundColorSpan(Color.parseColor("0xff2929")));
+            }
     }
     /////////////////////////////////////////////////////////////////////
 
@@ -62,24 +62,19 @@ public class main extends Activity {
         CalendarDay.today();
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         ArrayList<CalendarDay> wDays = createCal();
-        EventDecorator decor = new EventDecorator(wDays);
-        decor.shouldDecorate(CalendarDay.from(2018, 7, 23));
-        for (CalendarDay day : wDays) {
-            calendarView.setDateSelected(day, true);
-            decor.shouldDecorate(day);
-        }
+        for (CalendarDay day : wDays) calendarView.setDateSelected(day, true);
         TextView nowTextView = findViewById(R.id.nowTextView);
+        EventDecorator decor = new EventDecorator(wDays);
         nowTextView.setText("" + CalendarDay.today());
     }
 
     private ArrayList<CalendarDay> createCal() {
         ArrayList<CalendarDay> wDays = new ArrayList();
         int fday = 3;
-        for (int y = 2018; y <= 2020; y++) {
-            for (int m = 0; m <= 11; m++) { //Обертка по месяцам (пока на август-сентябрь)
+        for (int y = 2018; y <= 2020; y++) { //Обертка по годам
+            for (int m = 0; m <= 11; m++) { //Обертка по месяцам
                 for (int d = 1; d <= checkMonth(CalendarDay.from(y, m, 5)); d++) { //Обертка по дням
-                    if ((d + fday) % 6 < 3)
-                        wDays.add(CalendarDay.from(y, m, d));
+                    if ((d + fday) % 6 < 3) wDays.add(CalendarDay.from(y, m, d));
                     if (d == checkMonth(CalendarDay.from(y, m, d))) fday = (d + fday) % 6;
                 }
             }
